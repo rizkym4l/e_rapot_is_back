@@ -102,7 +102,7 @@ class AdminController extends Controller
     // Logika untuk menyimpan data sebagai Guru
     $validatedData = $request->validate([
         'name' => 'required|string|max:255',
-        'nis_nipk' => 'required|string|max:255|unique:gurus,nis',
+        'nis_nipk' => 'required|string|max:255|unique:guru,nis',
         'mapel_id' => 'required|integer',
     ]);
 

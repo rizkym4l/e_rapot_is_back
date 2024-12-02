@@ -28,29 +28,32 @@ class historyController extends Controller
     {
         $year = $request->query('year');
         $month = $request->query('month');
-
-        // Mengambil data dari NilaiHistory yang created_at-nya sesuai dengan tahun dan bulan yang dipilih
-        $reportData = NilaiHistory::with([
-            'nilaiSiswa.mapel',           // Relasi ke mata pelajaran
-            'nilaiSiswa.tahunAjaran',     // Relasi ke tahun ajaran
+    
+        // Fetch all data for the given year and month
+        $allData = NilaiHistory::with([
+            'nilaiSiswa.mapel',
+            'nilaiSiswa.tahunAjaran',
             'siswa',
-            'user'                        // Relasi ke user yang mengubah data
+            'user'
         ])
             ->whereYear('created_at', $year)
             ->whereMonth('created_at', $month)
             ->get();
-
-        // dd($reportData[0]);
-
+    
+        // Separate data into new and updated
+        $newData = $allData->whereNull('nilai_before');
+        $updatedData = $allData->whereNotNull('nilai_before');
+    
         $pdf = PDF::loadView('admin.history.monthly_report', [
-            'reportData' => $reportData,
+            'newData' => $newData,
+            'updatedData' => $updatedData,
             'year' => $year,
             'month' => Carbon::create()->month($month)->format('F')
         ]);
-
+    
         $fileName = "Report_{$year}_{$month}.pdf";
-
-        // Return PDF sebagai download response
+    
+        // Return PDF as download response
         return $pdf->download($fileName);
     }
 

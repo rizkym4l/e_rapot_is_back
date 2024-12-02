@@ -6,6 +6,7 @@ use App\Models\Siswa;
 use App\Models\NilaiHistory;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Session;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\GuruController;
 use App\Http\Controllers\AdminController;
@@ -62,7 +63,33 @@ Route::middleware('auth')->group(function () {
         $totalSiswa = Siswa::count();
         $totalUser = User::count();
         $totalHistory = NilaiHistory::count();
-
+    
+        // Check for new data
+        $newData = [];
+    
+        $latestGuru = Guru::latest()->first();
+        if ($latestGuru && $latestGuru->created_at->isToday()) {
+            $newData['guru'] = $latestGuru;
+        }
+    
+        $latestSiswa = Siswa::latest()->first();
+        if ($latestSiswa && $latestSiswa->created_at->isToday()) {
+            $newData['siswa'] = $latestSiswa;
+        }
+    
+        $latestUser = User::latest()->first();
+        if ($latestUser && $latestUser->created_at->isToday()) {
+            $newData['user'] = $latestUser;
+        }
+    
+        $latestHistory = NilaiHistory::latest()->first();
+        if ($latestHistory && $latestHistory->created_at->isToday()) {
+            $newData['history'] = $latestHistory;
+        }
+    
+        // Store new data in session
+        Session::flash('newData', $newData);
+    
         return view('admin.dashboard', [
             'totalGuru' => $totalGuru,
             'totalSiswa' => $totalSiswa,
