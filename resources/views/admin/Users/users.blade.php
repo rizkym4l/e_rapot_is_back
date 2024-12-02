@@ -123,7 +123,7 @@
                         </thead>
                         <tbody class="divide-y divide-slate-700">
                             @forelse ($users as $user)
-                                <tr class="text-slate-300 hover:bg-slate-700/50 transition-colors duration-200">
+                                <tr class="text-slate-300 hover:bg-slate-700/50 transition-colors duration-200 cursor-pointer user-row" data-user="{{ json_encode($user) }}">
                                     <td class="py-3 px-6">
                                         <div class="flex items-center gap-3">
                                             <div
@@ -169,7 +169,7 @@
                                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1"
                                                         viewBox="0 0 20 20" fill="currentColor">
                                                         <path fill-rule="evenodd"
-                                                            d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                                                            d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a11 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
                                                             clip-rule="evenodd" />
                                                     </svg>
                                                     Delete
@@ -204,6 +204,35 @@
         </div>
     </div>
 
+    <!-- User Modal -->
+    <div id="userModal" class="fixed inset-0 z-50 overflow-y-auto hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+            <div class="inline-block align-bottom bg-slate-800 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                <div class="bg-slate-800 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                    <div class="sm:flex sm:items-start">
+                        <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                            <h3 class="text-lg leading-6 font-medium text-white" id="modal-title">
+                                User Details
+                            </h3>
+                            <div class="mt-2">
+                                <p class="text-sm text-gray-300" id="modalUserName"></p>
+                                <p class="text-sm text-gray-300" id="modalUserEmail"></p>
+                                <p class="text-sm text-gray-300" id="modalUserRole"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-slate-700 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                    <button type="button" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm" id="closeModal">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         // Close alerts after 5 seconds
         setTimeout(() => {
@@ -214,5 +243,35 @@
                 setTimeout(() => alert.remove(), 300);
             });
         }, 5000);
+
+        // User Modal Functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const userRows = document.querySelectorAll('.user-row');
+            const userModal = document.getElementById('userModal');
+            const closeModal = document.getElementById('closeModal');
+            const modalUserName = document.getElementById('modalUserName');
+            const modalUserEmail = document.getElementById('modalUserEmail');
+            const modalUserRole = document.getElementById('modalUserRole');
+
+            userRows.forEach(row => {
+                row.addEventListener('click', function() {
+                    const userData = JSON.parse(this.dataset.user);
+                    modalUserName.textContent = `Name: ${userData.name}`;
+                    modalUserEmail.textContent = `Email: ${userData.email}`;
+                    modalUserRole.textContent = `Role: ${userData.role}`;
+                    userModal.classList.remove('hidden');
+                });
+            });
+
+            closeModal.addEventListener('click', function() {
+                userModal.classList.add('hidden');
+            });
+
+            window.addEventListener('click', function(event) {
+                if (event.target === userModal) {
+                    userModal.classList.add('hidden');
+                }
+            });
+        });
     </script>
 @endsection

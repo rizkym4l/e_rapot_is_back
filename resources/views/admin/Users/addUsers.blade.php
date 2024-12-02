@@ -2,6 +2,8 @@
 
 @section('contentAdmin')
     <div class="min-h-screen bg-slate-900 p-6">
+
+
         <div class="container mx-auto space-y-6">
             <!-- Header -->
             <div class="bg-slate-800/50 backdrop-blur-xl border border-slate-700 p-6 rounded-xl shadow-xl">
@@ -21,73 +23,124 @@
                     </div>
                 </div>
             </div>
-
+        <!-- Alert Messages -->
+        @if (session('success'))
+        <div class="p-4 mb-6 text-sm text-green-800 bg-green-100 border border-green-200 rounded-lg" role="alert">
+            {{ session('success') }}
+        </div>
+        @endif
+        
+        @if (session('error'))
+        <div class="p-4 mb-6 text-sm text-red-800 bg-red-100 border border-red-200 rounded-lg" role="alert">
+            {{ session('error') }}
+        </div>
+        @endif
+        
+        @if ($errors->any())
+        <div class="p-4 mb-6 text-sm text-red-800 bg-red-100 border border-red-200 rounded-lg" role="alert">
+            <strong>Whoops! Something went wrong:</strong>
+            <ul class="mt-2">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+        @endif
             <!-- Add User Form -->
             <div class="bg-slate-800/50 backdrop-blur-xl border border-slate-700 rounded-xl shadow-xl overflow-hidden">
-                <div class="p-6 border-b border-slate-700">
-                    <h2 class="text-lg font-semibold text-white">User Details</h2>
-                </div>
-
                 <form action="{{ route('users.store') }}" method="POST" enctype="multipart/form-data"
-                    class="p-6 space-y-6">
+                    class="space-y-6">
                     @csrf
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div class="space-y-2">
-                            <label for="name" class="block text-sm font-medium text-slate-300">Name</label>
-                            <input type="text" name="name" id="name" required
-                                class="w-full px-3 py-2 bg-slate-700/50 border border-slate-600 rounded-lg text-slate-200 placeholder-slate-400 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
-                                placeholder="Enter user's name">
-                        </div>
-
-                        <div class="space-y-2">
-                            <label for="email" class="block text-sm font-medium text-slate-300">Email</label>
-                            <input type="email" name="email" id="email" required
-                                class="w-full px-3 py-2 bg-slate-700/50 border border-slate-600 rounded-lg text-slate-200 placeholder-slate-400 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
-                                placeholder="Enter user's email">
-                        </div>
-
-                        <div class="space-y-2">
-                            <label for="password" class="block text-sm font-medium text-slate-300">Password</label>
-                            <input type="password" name="password" id="password" required
-                                class="w-full px-3 py-2 bg-slate-700/50 border border-slate-600 rounded-lg text-slate-200 placeholder-slate-400 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
-                                placeholder="Create a password">
-                        </div>
-
-                        <div class="space-y-2">
-                            <label for="role" class="block text-sm font-medium text-slate-300">Role</label>
-                            <select name="role" id="role" required
-                                class="w-full px-3 py-2 bg-slate-700/50 border border-slate-600 rounded-lg text-slate-200 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500">
-                                <option value="admin">Admin</option>
-                                <option value="siswa">Siswa</option>
-                                <option value="guru">Guru</option>
-                            </select>
-                        </div>
+                    <!-- User Account Details -->
+                    <div class="p-6 border-b border-slate-700">
+                        <h2 class="text-lg font-semibold text-white">User Details</h2>
                     </div>
 
-                    <div class="space-y-2">
-                        <label for="photo" class="block text-sm font-medium text-slate-300">Photo</label>
-                        <div class="flex items-center space-x-4">
-                            <div
-                                class="w-16 h-16 bg-slate-700/50 border border-slate-600 rounded-lg flex items-center justify-center">
-                                <svg class="w-8 h-8 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z">
-                                    </path>
-                                </svg>
+                    <div class="p-6 space-y-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <!-- Name -->
+                            <div class="space-y-2">
+                                <label for="username" class="block text-sm font-medium text-slate-300">Username</label>
+                                <input type="text" name="username" id="name" required
+                                    class="w-full px-3 py-2 bg-slate-700/50 border border-slate-600 rounded-lg text-slate-200 placeholder-slate-400 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
+                                    placeholder="Enter user's name">
                             </div>
-                            <input type="file" name="photo" id="photo" accept="image/*"
-                                class="block w-full text-sm text-slate-400
-                                file:mr-4 file:py-2 file:px-4
-                                file:rounded-lg file:border-0
-                                file:text-sm file:font-medium
-                                file:bg-cyan-900/50 file:text-cyan-400
-                                hover:file:bg-cyan-900
-                                file:cursor-pointer file:transition-colors">
+
+                            <!-- Email -->
+                            <div class="space-y-2">
+                                <label for="email" class="block text-sm font-medium text-slate-300">Email</label>
+                                <input type="email" name="email" id="email" required
+                                    class="w-full px-3 py-2 bg-slate-700/50 border border-slate-600 rounded-lg text-slate-200 placeholder-slate-400 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
+                                    placeholder="Enter user's email">
+                            </div>
+
+                            <!-- Password -->
+                            <div class="space-y-2">
+                                <label for="password" class="block text-sm font-medium text-slate-300">Password</label>
+                                <input type="password" name="password" id="password" required
+                                    class="w-full px-3 py-2 bg-slate-700/50 border border-slate-600 rounded-lg text-slate-200 placeholder-slate-400 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
+                                    placeholder="Create a password">
+                            </div>
+
+                            <!-- Role -->
+                            <div class="space-y-2">
+                                <label for="role" class="block text-sm font-medium text-slate-300">Role</label>
+                                <select name="role" id="role" required
+                                    class="w-full px-3 py-2 bg-slate-700/50 border border-slate-600 rounded-lg text-slate-200 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500">
+                                    <option value="">Select Role</option>
+                                    <option value="admin">Admin</option>
+                                    <option value="siswa">Siswa</option>
+                                    <option value="guru">Guru</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="flex justify-end">
+                    <!-- Additional User Info -->
+                    <div id="dataDiriSection" class="p-6 space-y-6">
+                        <h2 class="text-lg font-semibold text-white">Data Diri</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="space-y-2">
+                                <label for="username" class="block text-sm font-medium text-slate-300">Name</label>
+                                <input type="text" name="name" id="name" required
+                                    class="w-full px-3 py-2 bg-slate-700/50 border border-slate-600 rounded-lg text-slate-200 placeholder-slate-400 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
+                                    placeholder="Enter  name">
+                            </div>
+                            <!-- NIS/NIPK -->
+                            <div class="space-y-2">
+                                <label for="nis_nipk" class="block text-sm font-medium text-slate-300">NIS/NIPK</label>
+                                <input type="text" name="nis_nipk" id="nis_nipk" required
+                                    class="w-full px-3 py-2 bg-slate-700/50 border border-slate-600 rounded-lg text-slate-200 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
+                                    placeholder="Enter NIS or NIPK">
+                            </div>
+                            <!-- Class ID -->
+                            <div id="classIdField" class="space-y-2">
+                                <label for="kelas_id" class="block text-sm font-medium text-slate-300">Class ID</label>
+                                <input type="text" name="kelas_id" id="kelas_id"
+                                    class="w-full px-3 py-2 bg-slate-700/50 border border-slate-600 rounded-lg text-slate-200 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
+                                    placeholder="Enter Class ID (optional)">
+                            </div>
+
+                            <!-- Level -->
+                            <div id="levelField" class="space-y-2">
+                                <label for="tingkat" class="block text-sm font-medium text-slate-300">Level</label>
+                                <input type="text" name="tingkat" id="tingkat"
+                                    class="w-full px-3 py-2 bg-slate-700/50 border border-slate-600 rounded-lg text-slate-200 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
+                                    placeholder="Enter Level (optional)">
+                            </div>
+
+                            <!-- Subject ID -->
+                            <div id="subjectIdField" class="space-y-2">
+                                <label for="mapel_id" class="block text-sm font-medium text-slate-300">Subject ID</label>
+                                <input type="text" name="mapel_id" id="mapel_id"
+                                    class="w-full px-3 py-2 bg-slate-700/50 border border-slate-600 rounded-lg text-slate-200 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
+                                    placeholder="Enter Subject ID (optional)">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Submit -->
+                    <div class="flex justify-end p-6 border-t border-slate-700">
                         <button type="submit"
                             class="px-4 py-2 bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white font-medium rounded-lg transition-all duration-200">
                             Add User
@@ -97,4 +150,31 @@
             </div>
         </div>
     </div>
+
+    <script>
+        const roleSelect = document.getElementById('role');
+        const dataDiriSection = document.getElementById('dataDiriSection');
+        const classIdField = document.getElementById('classIdField');
+        const levelField = document.getElementById('levelField');
+        const subjectIdField = document.getElementById('subjectIdField');
+
+        roleSelect.addEventListener('change', () => {
+            const role = roleSelect.value;
+
+            // Reset visibility
+            dataDiriSection.style.display = 'block';
+            classIdField.style.display = 'block';
+            levelField.style.display = 'block';
+            subjectIdField.style.display = 'block';
+
+            if (role === 'admin') {
+                dataDiriSection.style.display = 'none';
+            } else if (role === 'siswa') {
+                subjectIdField.style.display = 'none';
+            } else if (role === 'guru') {
+                classIdField.style.display = 'none';
+                levelField.style.display = 'none';
+            }
+        });
+    </script>
 @endsection

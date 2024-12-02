@@ -13,6 +13,10 @@ use Illuminate\Support\Facades\Auth;
 
 class GuruController extends Controller
 {
+
+    public function adminTeacher(){
+        
+    }
     public function index()
     {
         $nama = Guru::where('akun_id', Auth::user()->id)->get();

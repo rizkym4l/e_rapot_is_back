@@ -14,6 +14,7 @@ use App\Http\Controllers\MapelController;
 use App\Http\Controllers\NilaiController;
 use App\Http\Controllers\historyController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\StudentController;
 use App\Http\Controllers\TingkatanController;
 
 /*
@@ -111,6 +112,10 @@ Route::middleware('checkRole:admin')->group(function () {
     Route::get('admin/history', [historyController::class, 'index'])->name('index.history');
     Route::post('/revert-change/{id}', [historyController::class, 'revertChange'])->name('revert.change');
     Route::get('/download-report', [historyController::class, 'downloadReport'])->name('download.report');
+
+    Route::get('admin/teacher/index', [GuruController::class,'adminTeacher'])->name('index.teacher');
+    
+    Route::get('admin/student/index', [StudentController::class,'adminStudent'])->name('index.student');
 
 
 });
