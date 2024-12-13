@@ -135,14 +135,20 @@ Route::middleware('checkRole:admin')->group(function () {
 
     Route::put('admin/users/update/{id}', [AdminController::class, 'update'])->name('users.update');
     Route::delete('admin/users/delete/{id}', [AdminController::class, 'deleteUsers'])->name('users.destroy');
+    Route::get('/users/import', [AdminController::class, 'importForm'])->name('users.import');
+Route::get('/users/import/template', [AdminController::class, 'importTemplate'])->name('users.import.template');
+Route::post('/users/import', [AdminController::class, 'importProcess'])->name('users.import.process');
 
     Route::get('admin/history', [historyController::class, 'index'])->name('index.history');
     Route::post('/revert-change/{id}', [historyController::class, 'revertChange'])->name('revert.change');
     Route::get('/download-report', [historyController::class, 'downloadReport'])->name('download.report');
 
     Route::get('admin/teacher/index', [GuruController::class,'adminTeacher'])->name('index.teacher');
+    Route::get('admin/teacher/delete/{id}', [GuruController::class,'deleteTeacher'])->name('teachers.destroy');
     
     Route::get('admin/student/index', [StudentController::class,'adminStudent'])->name('index.student');
+    Route::delete('admin/student/delete', [StudentController::class,'deleteStudent'])->name('student.destroy');
+
 
 
 });

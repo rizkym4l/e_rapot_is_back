@@ -5,10 +5,14 @@
     <div class="container mx-auto space-y-6">
         <!-- Alert Messages -->
         @if (session('success'))
-            <!-- Similar Alert Component -->
+        <div class="alert alert-success bg-green-200 my-8">
+            {{ session('success') }}
+        </div>
         @endif
         @if (session('error'))
-            <!-- Similar Alert Component -->
+        <div class="p-4 mb-6 text-sm text-red-800 bg-red-100 border border-red-200 rounded-lg" role="alert">
+            {{ session('error') }}
+        </div>
         @endif
 
         <!-- Header -->
@@ -31,17 +35,16 @@
 
         <!-- Search and Add Teacher -->
         <div class="flex flex-col md:flex-row gap-4">
-            <form action="{{ route('admin.teachers') }}" method="GET" class="flex-1">
+            <form action="
+            {{-- {{ route('admin.teachers') }} --}}
+             " method="GET" class="flex-1">
                 <div class="relative">
                     <input type="text" name="search" value="{{ request()->input('search') }}"
                         class="w-full pl-10 pr-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-slate-200 placeholder-slate-400 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
                         placeholder="Search by name or subject">
                 </div>
             </form>
-            <a href="{{ route('teachers.create') }}"
-                class="inline-flex items-center justify-center px-4 py-2 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white font-medium transition-all duration-200">
-                Add Teacher
-            </a>
+           
         </div>
 
         <!-- Teachers Table -->
@@ -53,20 +56,30 @@
                 <table class="w-full">
                     <thead>
                         <tr class="bg-slate-700/50 text-slate-300 text-sm">
-                            <th class="py-3 px-6 text-left">Name</th>
-                            <th class="py-3 px-6 text-left">Subject</th>
+                            <th class="py-3 px-6 text-left">NIPK</th>
+                            <th class="py-3 px-6 text-left">Nama Lengkap</th>
+                            <th class="py-3 px-6 text-left">Mapel</th>
                             <th class="py-3 px-6 text-left">Actions</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-700">
+                        {{-- {{$teachers[0]}} --}}
                         @forelse ($teachers as $teacher)
                             <tr class="text-slate-300 hover:bg-slate-700/50 transition-colors duration-200">
-                                <td class="py-3 px-6">{{ $teacher->name }}</td>
-                                <td class="py-3 px-6">{{ $teacher->subject }}</td>
+                                <td class="py-3 px-6">{{ $teacher->nipk }}</td>
+                                <td class="py-3 px-6">{{ $teacher->nama_lengkap }}</td>
+                                <td class="py-3 px-6">{{ $teacher->mapel_id['nama'] }}</td>
                                 <td class="py-3 px-6">
                                     <div class="flex items-center gap-3">
-                                        <a href="{{ route('teachers.edit', $teacher->id) }}" class="text-emerald-400 hover:text-emerald-300">Edit</a>
-                                        <form action="{{ route('teachers.destroy', $teacher->id) }}" method="POST">
+                                        <a href="
+                                        {{-- {{ route('teachers.edit', $teacher->id) }} --}}
+                                         " class="text-emerald-400 hover:text-emerald-300"
+                                         >Edit</a>
+                                        <form  
+                                        onsubmit="return confirm('Are you sure you want to delete this user?')"
+                                        
+                                        action="{{route('teachers.destroy', $teacher->id)}}" method="POST">
+                                            
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="text-red-400 hover:text-red-300">Delete</button>

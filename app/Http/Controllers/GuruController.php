@@ -14,7 +14,34 @@ use Illuminate\Support\Facades\Auth;
 class GuruController extends Controller
 {
 
+    public function deleteTeacher(Request $id)
+    {
+        $guru = Guru::findOrFail($id);
+        return 'ini ada tolollllll' . $guru;
+           
+        try {
+            $guru = Guru::findOrFail($id);
+    
+            $guru->delete();
+            return "222222/";
+    
+            // return redirect()->route('index.teacher')->with('success', 'Guru berhasil dihapus.');
+        } catch (\Exception $e) {
+        return "222222/";
+
+            // return redirect()->route('index.teacher')->with('error', 'Terjadi kesalahan saat menghapus user.');
+        }
+    }
+    
+
     public function adminTeacher(){
+        $teachers = Guru::paginate(5);
+       
+        foreach ($teachers as $key) {
+             $key['mapel_id'] = Mapel::where("id",$key['mapel_id'])->get('nama')[0];
+        }
+
+        return view("admin.Teacher.index",["teachers" => $teachers]);
         
     }
     public function index()

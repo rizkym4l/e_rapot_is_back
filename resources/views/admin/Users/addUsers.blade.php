@@ -148,6 +148,46 @@
                     </div>
                 </form>
             </div>
+            <div>
+                <h1 class="text-2xl font-bold bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent">
+                    Import Users
+                </h1>
+                <p class="text-slate-400">Upload an Excel file to import multiple users</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Import Form -->
+    <div class="bg-slate-800/50 backdrop-blur-xl border border-slate-700 rounded-xl shadow-xl overflow-hidden">
+        <form 
+    {{-- action="{{ route('users.import.process') }}" --}}
+         method="POST" enctype="multipart/form-data" class="space-y-6">
+            @csrf
+            <div class="p-6 space-y-6">
+                <div class="space-y-2">
+                    <label for="excel_file" class="block text-sm font-medium text-slate-300">Excel File</label>
+                    <input type="file" name="excel_file" id="excel_file" required
+                        class="w-full px-3 py-2 bg-slate-700/50 border border-slate-600 rounded-lg text-slate-200 focus:outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500"
+                        accept=".xlsx,.xls,.csv">
+                </div>
+                <div class="text-sm text-slate-400">
+                    <p>Please use the provided Excel template for importing users. You can download the template below.</p>
+                </div>
+            </div>
+            <div class="flex justify-between items-center p-6 border-t border-slate-700">
+                <a 
+                href="{{ route('users.import.template') }}"
+                    class="inline-flex items-center justify-center px-4 py-2 rounded-lg bg-slate-700 hover:bg-slate-600 text-white font-medium transition-all duration-200">
+                    Download Template
+                </a>
+                <button type="submit"
+                    class="px-4 py-2 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white font-medium rounded-lg transition-all duration-200">
+                    Import Users
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
         </div>
     </div>
 

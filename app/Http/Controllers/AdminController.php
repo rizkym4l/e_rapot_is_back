@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Guru;
 use App\Models\User;
 use App\Models\Siswa;
+use App\Imports\UserImport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class AdminController extends Controller
@@ -15,6 +17,51 @@ class AdminController extends Controller
     // USER INI USER INI USER INI USER
     // USER INI USER INI USER INI USER
     // USER INI USER INI USER INI USER
+    public function importForm()
+    {
+        return view('users.import');
+    }
+
+    public function importTemplate(Request $request)
+    {
+        $role = $request->input('role', 'siswa'); 
+    
+        $headers = $role === 'guru'
+            ? ['username', 'email', 'password', 'name', 'nis/nik', 'subject_id']
+            : ['username', 'email', 'password', 'name', 'nis/nik', 'class_id', 'level'];
+    
+        $fileName = "{$role}_import_template.xlsx";
+        $filePath = storage_path("app/templates/$fileName");
+    
+        // Create the Excel template
+        Excel::store(new class($headers) implements \Maatwebsite\Excel\Concerns\FromArray {
+            private $headers;
+            public function __construct($headers) {
+                $this->headers = $headers;
+            }
+            public function array(): array {
+                return [$this->headers];
+            }
+        }, "templates/$fileName");
+    
+        return response()->download($filePath);
+    }
+    
+    
+    
+    public function importProcess(Request $request)
+    {
+        $request->validate([
+            'excel_file' => 'required|mimes:xlsx,xls,csv'
+        ]);
+
+        try {
+            Excel::import(new UserImport, $request->file('excel_file'));
+            return redirect()->route('admin.users')->with('success', 'Users imported successfully.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Error importing users: ' . $e->getMessage());
+        }
+    }
 
     public function indexusers(Request $request)
 {
